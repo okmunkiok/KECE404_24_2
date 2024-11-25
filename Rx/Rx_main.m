@@ -6,7 +6,7 @@ Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV = 5; % Listening state
 Whether_there_was_an_error = false;
 Whether_OCR = true;
 % 컴퓨터 바뀔 때마다 체크해야할 부분 == CTRL + F "여기 반드시 확인"
-% 여기 반드시 확인
+% 여기 반드시 확인 
 Save_and_Load_Tx_signal_MAT_Path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Tx\Tx_signal.MAT";
 Tx_Signal_Wav_Rx_Path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Tx\Tx_signal.WAV";
 Rx_Setting_MAT_path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Rx\Rx_Setting.MAT";
@@ -31,7 +31,8 @@ try
         'Whether_Basic_Pilot__OR__PAPR_improved_Pilot', ...
         'N_cp__that_is__Cyclic_Prefix_Length', ...
         'Whether_Pilot_Use_all_freq__OR__High_freq_only', ...
-        'T_p__that_is_preamble_1_length_Unit_is_Sample'};
+        'T_p__that_is_preamble_1_length_Unit_is_Sample', ...
+        'Whether_median_filter'};
     for i = 1:length(required_vars)
         if ~ismember(required_vars{i}, vars)
             disp('Rx_Setting_MAT 파일에 변수가 누락되어 있습니다.');
@@ -127,7 +128,8 @@ if Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 2
         'Whether_Basic_Pilot__OR__PAPR_improved_Pilot', ...
         'N_cp__that_is__Cyclic_Prefix_Length', ...
         'Whether_Pilot_Use_all_freq__OR__High_freq_only', ...
-        'T_p__that_is_preamble_1_length_Unit_is_Sample');
+        'T_p__that_is_preamble_1_length_Unit_is_Sample', ...
+        'Whether_median_filter');
 
     end_time = datetime("now", "Format", "yyyy-MM-dd HH:mm:ss");
     disp(['# Setting 종료 시각: ', char(end_time)]);
@@ -219,7 +221,7 @@ elseif Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 3 ...
             F_wake_up_signal = 15000;
             Wake_up_signal = sin(2 * pi * F_wake_up_signal * t);
             % Wake_up_threshold = max(xcorr(Wake_up_signal, Wake_up_signal)) / 2;
-            Wake_up_threshold = 100;
+            Wake_up_threshold = 50;
             start_time = datetime("now", "Format", "yyyy-MM-dd HH:mm:ss");
             disp(['# Listening State 시작 시각: ', char(start_time)]);
             while true
