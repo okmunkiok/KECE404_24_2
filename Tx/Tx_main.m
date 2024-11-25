@@ -79,6 +79,9 @@ function Tx_main(Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV)
         Save_and_Load_Tx_signal_MAT_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Tx\Tx_signal.MAT";
         Base_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Base_WAV\Base_6.WAV";
         Amplitude_ratio_Base_WAV_over_Tx_signal_WAV = 1;
+
+        Whether_median_filter = true;
+        Whether_median_filter = false;
         
         
     
