@@ -4,19 +4,29 @@ function Binarised_img_column_vector = Tx_Step_1_imread_resize_gray_mono_repetit
     % figure;
     % imshow(Img);
 
-    Resized_Img = imresize(Img, Fixed_Img_Size);
+    Img = imresize(Img, Fixed_Img_Size);
     % figure;
     % imshow(Resized_Img);
 
-    Gray_Img = rgb2gray(Resized_Img);
-    % figure;
-    % imshow(Gray_Img);
+    [~, ~, numChannels] = size(Img)
+    Whether_Logical = islogical(Img)
 
-    Binarised_img = imbinarize(Gray_Img);
+    % Img = rgb2gray(Img);
+    % Img = imbinarize(Img);
+    if numChannels == 3
+        Img = rgb2gray(Img);
+        % figure;
+        % imshow(Gray_Img);
+    % elseif numChannels == 1 && Whether_Logical == true
+    %     Img = imbinarize(Img);
     % figure;
     % imshow(Binarised_img);
+    end
+    Img = imbinarize(Img);
+    % size(Img)
+    % Img(1, 1)
 
-    Binarised_img_column_vector = Binarised_img(:);
+    Binarised_img_column_vector = Img(:);
 
     if Whether_NOT_Repetition_coding__OR__Repetition_How_many ~= 1
         Binarised_img_column_vector = repelem(Binarised_img_column_vector, Whether_NOT_Repetition_coding__OR__Repetition_How_many);

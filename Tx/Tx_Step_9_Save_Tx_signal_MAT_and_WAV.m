@@ -1,4 +1,4 @@
-function Tx_Step_9_Save_Tx_signal_MAT_and_WAV(Tx_signal, Sampling_Freq, Save_and_Load_Tx_signal_MAT_Path_and_File_Name, Save_and_Load_WAV_Path_and_File_Name, Whether_Use_Base_WAV__OR__NOT, Base_WAV_Path_and_File_Name, Amplitude_ratio_Base_WAV_over_Tx_signal_WAV)
+function Tx_Step_9_Save_Tx_signal_MAT_and_WAV(Tx_signal, Sampling_Freq, Save_and_Load_Tx_signal_MAT_Path_and_File_Name, Save_and_Load_WAV_Path_and_File_Name, Whether_Use_Base_WAV__OR__NOT, Base_WAV_Path_and_File_Name, Amplitude_ratio_Base_WAV_over_Tx_signal_WAV, Whether_Add_Preamble_sine_wave, Preamble_sine_wave)
 
     if Whether_Use_Base_WAV__OR__NOT == true
         [Base_WAV_siganl, Sampling_Freq_Previous_of_BASE_WAV] = audioread(Base_WAV_Path_and_File_Name);
@@ -33,6 +33,11 @@ function Tx_Step_9_Save_Tx_signal_MAT_and_WAV(Tx_signal, Sampling_Freq, Save_and
         Tx_signal = Base_WAV_siganl_mono_resampled;
     else
         Tx_signal = normalize(Tx_signal, 'range', [-1 1]);
+    end
+    
+    if Whether_Add_Preamble_sine_wave
+        Preamble_sine_wave = normalize(Preamble_sine_wave, 'range', [-1 1]);
+        Tx_signal = [Preamble_sine_wave; Tx_signal];
     end
     audiowrite(Save_and_Load_WAV_Path_and_File_Name, Tx_signal, Sampling_Freq);
     save(Save_and_Load_Tx_signal_MAT_Path_and_File_Name, 'Tx_signal');
