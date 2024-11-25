@@ -1,16 +1,24 @@
-function Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_File_Name, Tx_signal)
+function Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_File_Name, Tx_signal, Base_WAV_Path_and_File_Name, Whether_median_filter, Whether_OCR)
 
+    close all;
     load(Rx_Setting_MAT_path_and_File_Name);
 
     disp('## Tx_signal 분석 중입니다');
     start_time = datetime("now", "Format", "yyyy-MM-dd HH:mm:ss");
     disp(['## 시작 시각: ', char(start_time)]);
 
-    [xC, lags] = xcorr(Tx_signal, Preamble);
+    % [xC, lags] = xcorr(Tx_signal, Preamble);
+    % [~, idx] = max(xC);
+    % start_pt = lags(idx);
+    [Base_WAV, Fs] = audioread(Base_WAV_Path_and_File_Name);
+    [xC, lags] = xcorr(Tx_signal, Base_WAV);
     [~, idx] = max(xC);
     start_pt = lags(idx);
+    % length(Tx_signal);
+    % start_pt;
 
-    Tx_signal = Tx_signal(start_pt + T_p__that_is_preamble_1_length_Unit_is_Sample + 1 : end);
+    % Tx_signal = Tx_signal(start_pt + T_p__that_is_preamble_1_length_Unit_is_Sample + 1 : end);
+    Tx_signal = Tx_signal(start_pt + 1 : end);
 
     % Serial to Parallel
     OFDM_blks = {};
@@ -103,8 +111,56 @@ function Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_Fil
         Estimated_Img = reshape(decoded_bits, [Fixed_Img_Size(1), Fixed_Img_Size(2)]);
     end
     Estimated_Img = imresize(Estimated_Img, Fixed_Img_Size);
-    figure;
+    if Whether_median_filter == true
+        Estimated_Img = medfilt2(Estimated_Img, [3 3], 'symmetric');
+    end
+
+    % 문자열 변수 설정
+    a = 'asdf';
+    
+    % OCR 조건 확인 (예: Whether_OCR이 true일 때만 수행)
+    if Whether_OCR == true
+        % OCR 수행
+        results = ocr(Estimated_Img);
+        % results = ocr(Estimated_Img, 'Language', 'English', ...
+        %      'CharacterSet', ['가':'힣', 'A':'Z', 'a':'z', '0':'9']);
+
+        
+        % 인식된 텍스트 추출
+        recognizedText = results.Text;
+    else
+        recognizedText = '';
+    end
+    
+    % Figure 창 생성 및 크기 설정
+    figure('WindowState', 'maximized'); % 창을 최대화
+    
+    % 서브플롯 2행 1열 중 첫 번째에 이미지 표시
+    subplot(2,1,1); % 2행 1열의 첫 번째 서브플롯
     imshow(Estimated_Img);
+    title('이미지');
+    
+    % 서브플롯 2행 1열 중 두 번째에 텍스트 표시
+    subplot(2,1,2); % 2행 1열의 두 번째 서브플롯
+    axis off; % 축 숨기기
+    if ~isempty(recognizedText)
+        % 텍스트 박스에 인식된 텍스트 표시
+        text(0.5, 0.5, recognizedText, ...
+            'Units', 'normalized', ...           % 정규화된 단위 사용
+            'FontSize', 24, ...                  % 글씨 크기
+            'FontWeight', 'bold', ...            % 글씨 두께
+            'HorizontalAlignment', 'center', ... % 수평 정렬
+            'VerticalAlignment', 'middle', ...   % 수직 정렬
+            'Color', 'red');                      % 글씨 색상
+        title('인식된 텍스트');
+    else
+        title('인식된 텍스트가 없습니다.');
+    end
+
+    drawnow;
+
+    % figure;
+    % imshow(Estimated_Img);
 
     end_time = datetime("now", "Format", "yyyy-MM-dd HH:mm:ss");
     disp(['## Tx_signal 분석 완료 시각: ', char(end_time)]);
