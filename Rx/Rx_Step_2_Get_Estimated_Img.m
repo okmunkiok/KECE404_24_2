@@ -13,11 +13,14 @@ function Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_Fil
             
             % 20으로 나눈 나머지를 숫자로 저장
             remainder_num = mod(current_minute, 20) + 1;  % 13이 저장됨
-            remainder_num_spare = remainder_num + 1;  % 14이 저장됨
+            remainder_num_spare = mod(current_minute, 20);  % 12이 저장됨
+            if remainder_num_spare == 0
+                remainder_num_spare = 20;
+            end
             
             % 나머지를 문자열로 변환
             remainder_str = num2str(remainder_num);   % '13'이 저장됨
-            remainder_str_spare = num2str(remainder_num_spare);   % '14'이 저장됨
+            remainder_str_spare = num2str(remainder_num_spare);   % '12'이 저장됨
             
             % 파일 경로에 나머지 값 추가
             Base_WAV_Path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Base_WAV\Base_" + remainder_str + ".WAV";
@@ -146,13 +149,14 @@ function Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_Fil
     % OCR 조건 확인 (예: Whether_OCR이 true일 때만 수행)
     if Whether_OCR == true
         % OCR 수행
-        results = ocr(Estimated_Img);
+        % results = ocr(Estimated_Img);
         % results = ocr(Estimated_Img, 'Language', 'English', ...
         %      'CharacterSet', ['가':'힣', 'A':'Z', 'a':'z', '0':'9']);
 
         
         % 인식된 텍스트 추출
-        recognizedText = results.Text;
+        % recognizedText = results.Text;
+        recognizedText = performEasyOCR(Estimated_Img);
     else
         recognizedText = '';
     end
