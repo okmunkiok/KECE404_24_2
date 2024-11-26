@@ -10,7 +10,7 @@ Whether_OCR = true;
 Save_and_Load_Tx_signal_MAT_Path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Tx\Tx_signal.MAT";
 Tx_Signal_Wav_Rx_Path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Tx\Tx_signal.WAV";
 Rx_Setting_MAT_path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Rx\Rx_Setting.MAT";
-Base_WAV_Path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Base_WAV\Base_6.WAV";
+Base_WAV_Path_and_File_Name = "C:\Users\okmun\OneDrive\대외 공개 가능\고려대학교 전기전자공학부\24_2\종합설계II (신원재 교수님)\Base_WAV\Base_1.WAV";
 Listening_State_time_Sec = 1;
 
 try
@@ -32,7 +32,8 @@ try
         'N_cp__that_is__Cyclic_Prefix_Length', ...
         'Whether_Pilot_Use_all_freq__OR__High_freq_only', ...
         'T_p__that_is_preamble_1_length_Unit_is_Sample', ...
-        'Whether_median_filter'};
+        'Whether_median_filter', ...
+        'Whether_Use_Base_WAV_Changing_through_minute'};
     for i = 1:length(required_vars)
         if ~ismember(required_vars{i}, vars)
             disp('Rx_Setting_MAT 파일에 변수가 누락되어 있습니다.');
@@ -110,6 +111,9 @@ if Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 2
     Recording_Time_Sec = ((T_p__that_is_preamble_1_length_Unit_is_Sample + (Total_OFDM_symbols_Number_that_is_including_Pilot) * (N + N_cp__that_is__Cyclic_Prefix_Length)) / Sampling_Freq) * (1) + buffer_for_recording_time_sec;
     fprintf('Recording_Time_Sec: %s\n', num2str(Recording_Time_Sec));
 
+    Whether_Use_Base_WAV_Changing_through_minute = true;
+    % Whether_Use_Base_WAV_Changing_through_minute = false;
+
     Whether_median_filter = true;
     % Whether_median_filter = false;
 
@@ -129,7 +133,8 @@ if Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 2
         'N_cp__that_is__Cyclic_Prefix_Length', ...
         'Whether_Pilot_Use_all_freq__OR__High_freq_only', ...
         'T_p__that_is_preamble_1_length_Unit_is_Sample', ...
-        'Whether_median_filter');
+        'Whether_median_filter', ...
+        'Whether_Use_Base_WAV_Changing_through_minute');
 
     end_time = datetime("now", "Format", "yyyy-MM-dd HH:mm:ss");
     disp(['# Setting 종료 시각: ', char(end_time)]);
@@ -273,7 +278,7 @@ elseif Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 3 ...
                     fprintf('\n');  % 줄바꿈 추가
                     disp('Recording Completed');
                     try
-                        Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_File_Name, Tx_signal, Base_WAV_Path_and_File_Name, Whether_median_filter, Whether_OCR);
+                        Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_File_Name, Tx_signal, Base_WAV_Path_and_File_Name, Whether_median_filter, Whether_OCR, Whether_Use_Base_WAV_Changing_through_minute);
                     catch ME
                         fprintf('이미지 추정에 실패하였습니다. 신호가 오긴 한 건가요?: %s\n', ME.message);
                     end
@@ -313,5 +318,5 @@ elseif Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 3 ...
             % disp(['# Rx 중 총 경과 시간[s]: ', char(elapsed_time)]); 
         end
     end
-    Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_File_Name, Tx_signal, Base_WAV_Path_and_File_Name, Whether_median_filter, Whether_OCR);
+    Estimated_Img = Rx_Step_2_Get_Estimated_Img(Rx_Setting_MAT_path_and_File_Name, Tx_signal, Base_WAV_Path_and_File_Name, Whether_median_filter, Whether_OCR, Whether_Use_Base_WAV_Changing_through_minute);
 end
