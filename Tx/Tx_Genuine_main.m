@@ -8,26 +8,25 @@ function draw_and_transmit()
     drawing = ones(img_size);
     program_on = 1;
     brush_size = 2;
-    is_erasing = false;
     current_line = [];
     line_count = 0;
     
     % 화면 설정
     screenSize = get(0, 'ScreenSize');
     
-    % 메인 피규어 설정 수정
+    % 메인 피규어 설정
     h_fig = figure('Name', '그림판', ...
         'NumberTitle', 'off', ...
         'MenuBar', 'none', ...
         'ToolBar', 'none', ...
         'Units', 'normalized', ...
-        'Position', [0.1 0.1 0.8 0.8], ...  % 전체 창 크기 증가
+        'Position', [0.1 0.1 0.8 0.8], ...
         'Color', [0.9 0.9 0.9]);
     
-    % 축 설정 수정
+    % 축 설정
     h_axes = axes('Parent', h_fig, ...
         'Units', 'normalized', ...
-        'Position', [0.05 0.05 0.8 0.9], ...  % 그리기 영역 확대
+        'Position', [0.05 0.05 0.8 0.9], ...
         'XLim', [1 img_size(2)], ...
         'YLim', [1 img_size(1)], ...
         'YDir', 'reverse');
@@ -37,15 +36,10 @@ function draw_and_transmit()
     colormap(h_axes, gray);
     hold(h_axes, 'on');
     
-    % UI 컨트롤 위치 조정
-    % 오른쪽 여백을 줄이고 버튼들의 위치를 조정
+    % UI 컨트롤
     uicontrol('Style', 'pushbutton', 'String', '전송', ...
         'Units', 'normalized', 'Position', [0.87 0.1 0.08 0.05], ...
         'Callback', @sendImage);
-    
-    h_eraser = uicontrol('Style', 'togglebutton', 'String', '지우개', ...
-        'Units', 'normalized', 'Position', [0.87 0.2 0.08 0.05], ...
-        'Callback', @toggleEraser);
     
     uicontrol('Style', 'pushbutton', 'String', '전체 지우기', ...
         'Units', 'normalized', 'Position', [0.87 0.3 0.08 0.05], ...
@@ -91,7 +85,7 @@ function draw_and_transmit()
             line_count = line_count + 1;
             current_line = animatedline('Parent', h_axes, ...
                 'LineWidth', brush_size * 2, ...
-                'Color', is_erasing * [1 1 1]);
+                'Color', [0 0 0]);  % 항상 검은색
             addpoints(current_line, x, y);
             updateDrawing(x, y);
         end
@@ -99,8 +93,7 @@ function draw_and_transmit()
     
     function mouseUp(~, ~)
         current_line = [];
-        % 이전 위치 초기화
-        updateDrawing([], []); % persistent 변수 초기화
+        updateDrawing([], []);
     end
     
     function mouseMove(~, ~)
@@ -108,7 +101,6 @@ function draw_and_transmit()
         x = round(cp(1,1));
         y = round(cp(1,2));
         
-        % 브러시 포인터 업데이트
         set(brush_pointer, ...
             'XData', x, 'YData', y, ...
             'MarkerSize', brush_size * 2, ...
@@ -123,41 +115,31 @@ function draw_and_transmit()
     function updateDrawing(x, y)
         persistent prev_x prev_y
         
-        % 이전 위치가 없으면 현재 위치를 이전 위치로 설정
         if isempty(prev_x)
             prev_x = x;
             prev_y = y;
         end
         
-        % 이전 위치와 현재 위치 사이의 거리 계산
         distance = sqrt((x - prev_x)^2 + (y - prev_y)^2);
-        
-        % 최소 간격 설정 (너무 촘촘하지 않게)
         min_spacing = max(1, brush_size/2);
-        
-        % 필요한 보간 점의 개수 계산
         num_points = max(1, ceil(distance/min_spacing));
         
-        % 두 점 사이를 균일하게 보간
         if num_points > 1
             x_points = round(linspace(prev_x, x, num_points));
             y_points = round(linspace(prev_y, y, num_points));
             
-            % 각 보간점에 대해 점 찍기
             for i = 1:num_points
                 [X, Y] = meshgrid(max(1,x_points(i)-brush_size):min(img_size(2),x_points(i)+brush_size), ...
                                  max(1,y_points(i)-brush_size):min(img_size(1),y_points(i)+brush_size));
                 dist = sqrt((X-x_points(i)).^2 + (Y-y_points(i)).^2);
                 mask = dist <= brush_size;
                 indices = sub2ind(size(drawing), Y(mask), X(mask));
-                drawing(indices) = is_erasing;
+                drawing(indices) = 0;  % 항상 검은색(0)으로 그리기
             end
             
-            % 이미지 업데이트
             set(h_img, 'CData', drawing);
         end
         
-        % 현재 위치를 다음 반복을 위해 저장
         prev_x = x;
         prev_y = y;
     end

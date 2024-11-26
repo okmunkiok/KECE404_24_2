@@ -79,6 +79,22 @@ function Tx_main(Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV)
         Save_and_Load_Tx_signal_MAT_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Tx\Tx_signal.MAT";
         Base_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Base_WAV\Base_6.WAV";
         Amplitude_ratio_Base_WAV_over_Tx_signal_WAV = 1;
+        Whether_Use_Base_WAV_Changing_through_minute = true;
+        % Whether_Use_Base_WAV_Changing_through_minute = false;
+        if Whether_Use_Base_WAV_Changing_through_minute == true
+            % 현재 시간의 '분'을 숫자로 추출
+            current_minute = minute(start_time);  % 53이 저장됨
+            
+            % 20으로 나눈 나머지를 숫자로 저장
+            remainder_num = mod(current_minute, 20) + 1;  % 13이 저장됨
+            
+            % 나머지를 문자열로 변환
+            remainder_str = num2str(remainder_num);   % '13'이 저장됨
+            
+            % 파일 경로에 나머지 값 추가
+            Base_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Base_WAV\Base_" + remainder_str + ".WAV";
+            % 결과: "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Base_WAV\Base13.WAV"
+        end
 
         Whether_median_filter = true;
         Whether_median_filter = false;
