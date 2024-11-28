@@ -3,7 +3,7 @@ function Tx_main(Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV)
     % Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV = false;
     % 컴퓨터 바뀔 때마다 체크해야할 부분 == CTRL + F "여기 반드시 확인"
     % 여기 반드시 확인
-    Save_and_Load_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Tx\Tx_signal.WAV";
+    Save_and_Load_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\최종본\Tx\Tx_signal.WAV";
     
     if Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV == false
         clearvars -except Save_and_Load_WAV_Path_and_File_Name Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV;
@@ -20,7 +20,7 @@ function Tx_main(Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV)
         % Whether_NOT_Repetition_coding__OR__Repetition_How_Many = 1;
         Whether_NOT_Repetition_coding__OR__Repetition_How_Many = 3;
         % 여기 반드시 확인
-        Img_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Tx\IMG.PNG";
+        Img_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\최종본\Tx\IMG.PNG";
         Fixed_Img_Size = [128 128];
         
         Whether_PAPR_improved_inter_leaving__OR__NOT = true;
@@ -62,7 +62,7 @@ function Tx_main(Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV)
         Whether_Add_Preamble_sine_wave = true;
         % Whether_Add_Preamble_sine_wave = false;
         duration = 2;
-        f_Preamble_sine_wave = 15000;
+        f_Preamble_sine_wave = 19000;
         t_Preamble_sine_wave = (0:1/Sampling_Freq:duration).';
         Preamble_sine_wave = sin(2 * pi * f_Preamble_sine_wave * t_Preamble_sine_wave);
        
@@ -76,8 +76,8 @@ function Tx_main(Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV)
         % 여기 반드시 확인
         Whether_Use_Base_WAV__OR__NOT = true;
         % Whether_Use_Base_WAV__OR__NOT = false;
-        Save_and_Load_Tx_signal_MAT_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Tx\Tx_signal.MAT";
-        Base_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Base_WAV\Base_6.WAV";
+        Save_and_Load_Tx_signal_MAT_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\최종본\Tx\Tx_signal.MAT";
+        Base_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\최종본\Base_WAV\Base_6.WAV";
         Amplitude_ratio_Base_WAV_over_Tx_signal_WAV = 1;
         Whether_Use_Base_WAV_Changing_through_minute = true;
         % Whether_Use_Base_WAV_Changing_through_minute = false;
@@ -92,8 +92,8 @@ function Tx_main(Whether_Only_Tx__OR__Set_Save_Tx_signal_MAT_and_Tx_signal_WAV)
             remainder_str = num2str(remainder_num);   % '13'이 저장됨
             
             % 파일 경로에 나머지 값 추가
-            Base_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Base_WAV\Base_" + remainder_str + ".WAV";
-            % 결과: "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Base_WAV\Base13.WAV"
+            Base_WAV_Path_and_File_Name = "C:\Users\user\Desktop\졸업드가자\종합설계\최종본\Base_WAV\Base_" + remainder_str + ".WAV";
+            % 결과: "C:\Users\user\Desktop\졸업드가자\종합설계\최종본\Base_WAV\Base13.WAV"
         end
 
         Whether_median_filter = true;

@@ -159,7 +159,7 @@ function draw_and_transmit()
     
     function sendImage(~, ~)
         img = uint8(drawing * 255);
-        imwrite(img, "C:\Users\user\Desktop\졸업드가자\종합설계\테스트\Tx\IMG.PNG");
+        imwrite(img, "C:\Users\user\Desktop\졸업드가자\종합설계\최종본\Tx\IMG.PNG");
         Tx_main(false);
         Tx_main(true);
     end
