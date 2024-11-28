@@ -223,7 +223,7 @@ elseif Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 3 ...
             disp(['# Rx 중 총 경과 시간[s]: ', char(elapsed_time)]); 
         elseif Whether_Only_Rx__OR__Set__OR__Load_Rx_signal_MAT__OR__WAV == 5
             t = 0:(1/Sampling_Freq):Listening_State_time_Sec;
-            F_wake_up_signal = 15000;
+            F_wake_up_signal = 19000;
             Wake_up_signal = sin(2 * pi * F_wake_up_signal * t);
             % Wake_up_threshold = max(xcorr(Wake_up_signal, Wake_up_signal)) / 2;
             Wake_up_threshold = 50;
